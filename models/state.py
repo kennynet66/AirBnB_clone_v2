@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Defines the State class."""
+"""Defines the parent State class."""
 import models
 from os import getenv
 from models.base_model import Base
@@ -11,12 +11,12 @@ from sqlalchemy.orm import relationship
 
 
 class State(BaseModel, Base):
-    """Represents a state for a MySQL database.
+    """Represents a single state for a mysequel database.
 
-    Inherits from SQLAlchemy Base and links to the MySQL table states.
+    Inherits from SQLAlchemy Base and links to the mysequel table states.
 
     Attributes:
-        __tablename__ (str): The name of the MySQL table to store States.
+        __tablename__ (str): The name of the mysequel table to store States.
         name (sqlalchemy String): The name of the State.
         cities (sqlalchemy relationship): The State-City relationship.
     """

@@ -12,10 +12,12 @@ Base = declarative_base()
 
 
 class BaseModel:
-    """Defines the BaseModel class.
+    """Base model class for all models.
+     It provides common attributes and methods
+     for managing model instances
 
     Attributes:
-        id (sqlalchemy String): The BaseModel id.
+        id (sqlalchemy Strng): The BaseModel id.
         created_at (sqlalchemy DateTime): The datetime at creation.
         updated_at (sqlalchemy DateTime): The datetime of last update.
     """
@@ -25,11 +27,10 @@ class BaseModel:
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
-        """Initialize a new BaseModel.
+        """Initializes a new BaseModel instance.
 
-        Args:
-            *args (any): Unused.
-            **kwargs (dict): Key/value pairs of attributes.
+         Arguments:
+            **kwargs: Keyword arguments
         """
         self.id = str(uuid4())
         self.created_at = self.updated_at = datetime.utcnow()
@@ -41,16 +42,14 @@ class BaseModel:
                     setattr(self, key, value)
 
     def save(self):
-        """Update updated_at with the current datetime."""
+        """Updates the `updated_at` timestamp."""
         self.updated_at = datetime.utcnow()
         models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
-        """Return a dictionary representation of the BaseModel instance.
-
-        Includes the key/value pair __class__ representing
-        the class name of the object.
+        """Returns a dictionary representation of the model instance.
+        Includes the class name for proper deserialization.
         """
         my_dict = self.__dict__.copy()
         my_dict["__class__"] = str(type(self).__name__)
@@ -60,11 +59,12 @@ class BaseModel:
         return my_dict
 
     def delete(self):
-        """Delete the current instance from storage."""
+        """Delete the instance from storage."""
         models.storage.delete(self)
 
     def __str__(self):
-        """Return the print/str representation of the BaseModel instance."""
+        """Return a human readable print or string
+        representation of the instance."""
         d = self.__dict__.copy()
         d.pop("_sa_instance_state", None)
         return "[{}] ({}) {}".format(type(self).__name__, self.id, d)
